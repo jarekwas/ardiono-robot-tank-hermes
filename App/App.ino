@@ -49,11 +49,11 @@ void loop()
 
     if (runing)
     {
-        md.setM2Speed(speedR*-1);
-        md.setM1Speed(speedL);
+        md.setM2Speed(speedR);
+        md.setM1Speed(speedL*-1);
     }
     else
-    {
+        {
         md.setM1Speed(0);
         md.setM2Speed(0);
     }

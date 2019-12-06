@@ -1,13 +1,18 @@
 #include <SoftwareSerial.h>
 #include "DualVNH5019MotorShield.h"
+#include "HC_SR04.hpp"
 
-SoftwareSerial bluetooth_serial(5, 3);
+SoftwareSerial bluetooth_serial(19, 18);
 DualVNH5019MotorShield md;
+
+HC_SR04 frontDistanceSensor(17, 5);
+HC_SR04 backDistanceSensor(16, 11);
 
 void setup()
 {
     Serial.begin(115200);
     bluetooth_serial.begin(9600);
+
     md.init();
 }
 
@@ -37,6 +42,7 @@ void stopIfFault()
 
 void loop()
 {
+
     stopIfFault();
 
     if (bluetooth_serial.available())
@@ -146,8 +152,46 @@ void loop()
 
     if (runing)
     {
-        md.setM2Speed(speedR);
-        md.setM1Speed(speedL * -1);
+        uint8_t fontDistance = frontDistanceSensor.readDistance();
+        uint8_t backDistance = backDistanceSensor.readDistance();
+
+        if (speedR > 0 && speedL > 0)
+        {
+            if (fontDistance > 10)
+            {
+                md.setM2Speed(speedR);
+                md.setM1Speed(speedL * -1);
+            }else{
+                md.setM2Speed(0);
+                md.setM1Speed(0);
+            }
+        }
+        else if (speedR < 0 && speedL < 0)
+        {
+            if (backDistance > 10)
+            {
+                md.setM2Speed(speedR);
+                md.setM1Speed(speedL * -1);
+            }else{
+                md.setM2Speed(0);
+                md.setM1Speed(0);
+            }
+        }
+        else
+        {
+            md.setM2Speed(speedR);
+            md.setM1Speed(speedL * -1);
+        }
+
+        Serial.print("F:");
+        Serial.print(fontDistance);
+        Serial.print("cm, B: ");
+        Serial.print(backDistance);
+        Serial.print("cm, R: ");
+        Serial.print(speedR);
+        Serial.print(" L: ");
+        Serial.println(speedL);
+
         delay(2);
 
         /*    Serial.print("M2 current: ");

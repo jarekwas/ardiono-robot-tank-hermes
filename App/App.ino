@@ -159,28 +159,28 @@ void loop()
         {
             if (fontDistance > 10)
             {
-                md.setM2Speed(speedR);
-                md.setM1Speed(speedL * -1);
+                md.setM1Speed(speedR * -1);
+                md.setM2Speed(speedL);
             }else{
-                md.setM2Speed(0);
                 md.setM1Speed(0);
+                md.setM2Speed(0);
             }
         }
         else if (speedR < 0 && speedL < 0)
         {
             if (backDistance > 10)
             {
-                md.setM2Speed(speedR);
-                md.setM1Speed(speedL * -1);
+                md.setM1Speed(speedR * -1);
+                md.setM2Speed(speedL);
             }else{
-                md.setM2Speed(0);
                 md.setM1Speed(0);
+                md.setM2Speed(0);
             }
         }
         else
         {
-            md.setM2Speed(speedR);
-            md.setM1Speed(speedL * -1);
+            md.setM1Speed(speedR* -1);
+            md.setM2Speed(speedL );
         }
 
         Serial.print("F:");
